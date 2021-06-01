@@ -1,0 +1,63 @@
+# 这是一个示例的logtube配置, 更多请参考wiki文档 http://wiki.pagoda.com.cn/pages/viewpage.action?pageId=11013967
+logtube:
+  # 项目名
+  project: xxl-job-admin
+  # 项目环境
+  env: local
+  topics:
+    # 全局主题过滤器，设置为不包括 trace 和 debug
+    root: ALL,-trace,-debug
+    # 开启框架输出
+    com.pagoda.platform.framework: ALL,-trace,-debug
+    # 开启输出mybatis sql
+    com.pagoda.rule.dao: ALL, -trace
+  #
+  # 分包主题过滤器
+  #
+  # logtube.topics.com.google.gson=error
+  # logtube.topics.com.google.gson=error
+  #
+  # 全局主题映射，trace 合并进入 debug, error 重命名为 err
+  topic-mappings: trace=debug,error=err
+  ##########################################
+  #
+  # 命令行输出
+  #
+  ##########################################
+  console:
+    # 是否开启命令行输出，设置为关闭
+    enabled: true
+    # 命令行设置为包括所有主题
+    topics: ALL
+
+  ##########################################
+  #
+  # 文本日志文件输出 需要logtube 0.33
+  #
+  ##########################################
+  file:
+    # 是否开启文本日志文件输出，设置为开启
+    enabled: true
+    # 日志文件输出包含所有主题（仍然受制于全局过滤器）
+    topics: ALL
+    # 文本日志文件输出的默认文件夹
+    dir: logs
+    # 文本日志信号文件，touch 该文件，会触发文件描述符重新打开，用于日志轮转
+    signal: /tmp/xlog.reopen.txt
+    subdir-mappings: ALL=xlog,trace=others,debug=others
+
+  #########################################
+  #
+  # 组件配置
+  #
+  #########################################
+  filter:
+    # HTTP 过滤器忽略记录某些请求，比如健康检查
+    # 默认已经包含 HEAD /, GET /check, GET /favicon.ico 等常见的无用请求
+    http-ignores:
+      - GET /health/check
+    # 响应时间 > 100 ms 的 Redis 操作会被 LogtubeRedis 组件汇报
+    redis-min-duration: 100
+    # 结果集 > 1000 bytes 的 Redis 操作会被 LogtubeRedis 组件汇报
+    redis-min-result-size: 1000
+

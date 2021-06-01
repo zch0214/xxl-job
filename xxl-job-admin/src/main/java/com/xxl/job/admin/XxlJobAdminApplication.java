@@ -1,5 +1,6 @@
 package com.xxl.job.admin;
 
+import org.quartz.Job;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -10,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class XxlJobAdminApplication {
 
 	public static void main(String[] args) {
+        System.setProperty("druid.filters","xLogSql");
         SpringApplication.run(XxlJobAdminApplication.class, args);
 	}
 
